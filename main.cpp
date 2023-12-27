@@ -6,7 +6,7 @@
 // Variables to change field size and the pase of the game
 int frames = 1;
 const int terrain_height = 8, terrain_width = 25;
-float pase = 50;
+float pase = 500;
 
 class Player {
 private:
@@ -124,6 +124,7 @@ int main(){
             player1.resetPlayerHeight();
             player2.resetPlayerHeight();
             ping_pong.resetPosition();
+            pase = 500;
         }
 
         // Updates the game
@@ -163,8 +164,8 @@ void updateGame(Player* player1, Player* player2, PingPong* ping_pong, char terr
     std::cout << frames << std::endl;
     frames++;
 
-    Sleep(pase); //125
-    // pase -= 5;
+    // Makes the game have a pase
+    Sleep(pase);
 }
 
 void playerMovement(Player* player1, Player* player2){
@@ -258,6 +259,7 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
     }
 
     // No collisions detected
+    pase -= 10;
     return false;
 }
 

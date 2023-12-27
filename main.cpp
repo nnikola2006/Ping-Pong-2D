@@ -5,8 +5,8 @@
 #include <cmath>
 // Variables to change field size and the pase of the game
 int frames = 1;
-const int terrain_height = 20, terrain_width = 70;
-float pase = 8.33;
+const int terrain_height = 7, terrain_width = 20;
+float pase = 20;
 
 // Player class
 class Player {
@@ -14,6 +14,7 @@ private:
     // Player's barrier starting position. It's made to start at the center
     int height = round(terrain_height / 2) - 2; 
     int player_lenght = round(terrain_height / 3);
+    int wins = 0;
 public:
     int getHeight(){
         return height;
@@ -30,6 +31,12 @@ public:
         if(height < terrain_height - player_lenght){
             height++;
         }
+    }
+    int getWins(){
+        return wins;
+    }
+    void giveWin(){
+        wins += 1;
     }
 };
 
@@ -85,6 +92,7 @@ void updateGame(Player* player1, Player* player2, PingPong* ping_pong, char terr
 void playerMovement(Player* player1, Player* player2);
 void draw(Player* player1, Player* player2, PingPong* ping_pong, char terrain[][terrain_width]);
 bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char terrain[][terrain_width]);
+void showScore(Player* player1, Player* player2);
 
 int main(){
     // Starts the main menu
@@ -96,12 +104,9 @@ int main(){
     char terrain[terrain_height][terrain_width]{};
     bool running = true;
 
-    while(running){
+    while(player1.getWins() < 3 || player2.getWins() < 3){
         // Checks for collisions with the player barriers for a winner
-        if(checkWinner(&player1, &player2, &ping_pong, terrain)){
-            running = false;
-            break;
-        }
+        checkWinner(&player1, &player2, &ping_pong, terrain);
 
         // Updates the game
         updateGame(&player1, &player2, &ping_pong, terrain);
@@ -213,6 +218,7 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
     }
     if(collision_counter == player1->getPlayerLenght()){
         std::cout << "Player 2 wins!" << std::endl;
+        player2->giveWin();
         return true;
     }
 
@@ -225,6 +231,7 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
     }
     if(collision_counter == player2->getPlayerLenght()){
         std::cout << "Player 1 wins!" << std::endl;
+        player1->giveWin();
         return true;
     }
 
@@ -232,4 +239,6 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
     return false;
 }
 
-
+void showScore(Player* player1, Player* player2){
+    std::cout << "" << std::endl;
+}

@@ -5,15 +5,14 @@
 #include <cmath>
 // Variables to change field size and the pase of the game
 int frames = 1;
-const int terrain_height = 7, terrain_width = 20;
-float pase = 20;
+const int terrain_height = 8, terrain_width = 25;
+float pase = 50;
 
-// Player class
 class Player {
 private:
     // Player's barrier starting position. It's made to start at the center
-    int height = round(terrain_height / 2) - 2; 
-    int player_lenght = round(terrain_height / 3);
+    int height = round(terrain_height / 2) - 1; 
+    int player_lenght = round(terrain_height / 3) + 1;
     int wins = 0;
 public:
     int getHeight(){
@@ -22,6 +21,13 @@ public:
     int getPlayerLenght(){
         return player_lenght;
     }
+
+    // Resets the player positions after a point
+    void resetPlayerHeight(){
+        height = round(terrain_height / 2) - 1;
+    }
+
+    // Player movement
     void moveUp(){
         if (height > 0){
             height--;
@@ -32,6 +38,8 @@ public:
             height++;
         }
     }
+
+    // Checks and gives player wins
     int getWins(){
         return wins;
     }
@@ -40,7 +48,6 @@ public:
     }
 };
 
-// Ping pong class
 class PingPong {
 private:
     int posX, posY;
@@ -60,6 +67,13 @@ public:
     }
     int getPosY(){
         return posY;
+    }
+
+    void setPosX(){
+        posX = terrain_width / 2;
+    }
+    void setPosY(){
+        posY = terrain_height / 2;
     }
 
     // Functions to move the ping_pong balls location
@@ -100,18 +114,26 @@ int main(){
 
     // Creates necessary variables
     Player player1, player2;
-    PingPong ping_pong(10, 4, 1, 1);
+    PingPong ping_pong(terrain_width / 2, terrain_height / 2, 1, 1);
     char terrain[terrain_height][terrain_width]{};
     bool running = true;
 
-    while(player1.getWins() < 3 || player2.getWins() < 3){
+    while(player1.getWins() < 3 && player2.getWins() < 3){
         // Checks for collisions with the player barriers for a winner
-        checkWinner(&player1, &player2, &ping_pong, terrain);
+        if(checkWinner(&player1, &player2, &ping_pong, terrain)){
+            Sleep(3000);
+            player1.resetPlayerHeight();
+            player2.resetPlayerHeight();
+        }
 
         // Updates the game
         updateGame(&player1, &player2, &ping_pong, terrain);
     }
+    // Clears the screen
+    std::cout << "\033[2J\033[01;1H";
 
+    // Shows the final results
+    showScore(&player1, &player2);
     return 0;
 }
 
@@ -217,7 +239,7 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
         }
     }
     if(collision_counter == player1->getPlayerLenght()){
-        std::cout << "Player 2 wins!" << std::endl;
+        std::cout << "Player 2 gets the point!" << std::endl;
         player2->giveWin();
         return true;
     }
@@ -230,7 +252,7 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
         }
     }
     if(collision_counter == player2->getPlayerLenght()){
-        std::cout << "Player 1 wins!" << std::endl;
+        std::cout << "Player 1 gets the point!" << std::endl;
         player1->giveWin();
         return true;
     }
@@ -240,5 +262,24 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
 }
 
 void showScore(Player* player1, Player* player2){
-    std::cout << "" << std::endl;
+    std::cout << "-------------------------------------------------------------" << std::endl;
+    std::cout << "|                                                           | " << std::endl;
+    std::cout << "|   ***** ***** *   * *****    ***** *   * ***** *****      | " << std::endl;
+    std::cout << "|   *     *   * ** ** *        *   * *   * *     *   *      | " << std::endl;
+    std::cout << "|   * *** ***** * * * *****    *   * *   * ***** *****      | " << std::endl;
+    std::cout << "|   *   * *   * *   * *        *   *  * *  *     * *        | " << std::endl;
+    std::cout << "|   ***** *   * *   * *****    *****   *   ***** *   *      | " << std::endl;
+    std::cout << "|                                                      v1.0 | " << std::endl;
+    std::cout << "-------------------------------------------------------------" << std::endl;
+    std::cout << std::endl;
+    
+    std::cout << "Final score:" << std::endl;
+    std::cout << player1->getWins() << " | " << player2->getWins() << std::endl;
+
+    if(player1->getWins() > player2->getWins()){
+        std::cout << "Player 1 wins!" << std::endl;
+    }
+    else{
+        std::cout << "Player 2 wins!" << std::endl;
+    }
 }

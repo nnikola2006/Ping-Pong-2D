@@ -69,11 +69,10 @@ public:
         return posY;
     }
 
-    void setPosX(){
-        posX = terrain_width / 2;
-    }
-    void setPosY(){
-        posY = terrain_height / 2;
+    void resetPosition(){
+        posX = round(terrain_width / 2);
+        posY = round(terrain_height / 2);
+        accelerateX = -accelerateX;
     }
 
     // Functions to move the ping_pong balls location
@@ -114,7 +113,7 @@ int main(){
 
     // Creates necessary variables
     Player player1, player2;
-    PingPong ping_pong(terrain_width / 2, terrain_height / 2, 1, 1);
+    PingPong ping_pong(round(terrain_width / 2), round(terrain_height / 2), 1, 1);
     char terrain[terrain_height][terrain_width]{};
     bool running = true;
 
@@ -124,6 +123,7 @@ int main(){
             Sleep(3000);
             player1.resetPlayerHeight();
             player2.resetPlayerHeight();
+            ping_pong.resetPosition();
         }
 
         // Updates the game

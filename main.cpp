@@ -100,7 +100,8 @@ public:
     }
 };
 
-void mainMenu();
+bool mainMenu();
+void credits();
 void updateGame(Player* player1, Player* player2, PingPong* ping_pong, char terrain[][terrain_width]);
 void playerMovement(Player* player1, Player* player2);
 void draw(Player* player1, Player* player2, PingPong* ping_pong, char terrain[][terrain_width]);
@@ -109,7 +110,9 @@ void showScore(Player* player1, Player* player2);
 
 int main(){
     // Starts the main menu
-    mainMenu();
+    if(mainMenu() != true){
+        return 0;
+    }
 
     // Creates necessary variables
     Player player1, player2;
@@ -138,12 +141,53 @@ int main(){
     return 0;
 }
 
-void mainMenu(){
-    std::cout << "***Press space to start the game***" << std::endl;
-
-    // When the player presses the spacebar start() function will get called
+bool mainMenu(){    
     while(true){
-        if(_getch() == ' '){
+        std::cout << "\033[2J\033[01;1H"; // works for vscode (CLS)
+        std::cout << " -------------------------------------------------------  " << std::endl;
+        std::cout << "|                                                       | " << std::endl;
+        std::cout << "|   ***** * *   * *****    ***** ***** *   * *****      | " << std::endl;
+        std::cout << "|   *   * * **  * *        *   * *   * **  * *          | " << std::endl;
+        std::cout << "|   ***** * * * * * ***    ***** *   * * * * * ***      | " << std::endl;
+        std::cout << "|   *     * *  ** *   *    *     *   * *  ** *   *      | " << std::endl;
+        std::cout << "|   *     * *   * *****    *     ***** *   * *****      | " << std::endl;
+        std::cout << "|                                                  v1.1 | " << std::endl;
+        std::cout << " -------------------------------------------------------  " << std::endl;
+        std::cout << std::endl;
+
+        std::cout << "*** MENU: ***" << std::endl;
+        std::cout << "Press 1 to start the game" << std::endl;
+        std::cout << "Press 2 to see the credits" << std::endl;
+        std::cout << "Press 3 to exit the game" << std::endl;
+
+        // When the player presses the a specific key a certain function will get called
+        char key = _getch();
+        switch(key){
+            case '1':
+                return true;
+                break;
+            case '2':
+                credits();
+                break;
+            case '3':
+                return false;
+                break;
+        }
+    }
+}
+
+void credits(){
+    std::cout << "\033[2J\033[01;1H"; // works for vscode (CLS)
+    std::cout << std::endl;
+    std::cout << "Lead programmer: Dzonex" << std::endl;
+    std::cout << "Designer: Dzonex" << std::endl;
+    std::cout << "Testers: Dzonex" << std::endl;
+    std::cout << "Version: 1.1" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Press any key to go back" << std::endl;
+    while(true){
+        if(_getch()){
             return;
         }
     }
@@ -264,15 +308,15 @@ bool checkWinner(Player* player1, Player* player2, PingPong* ping_pong, char ter
 }
 
 void showScore(Player* player1, Player* player2){
-    std::cout << "-------------------------------------------------------------" << std::endl;
+    std::cout << " -----------------------------------------------------------  " << std::endl;
     std::cout << "|                                                           | " << std::endl;
     std::cout << "|   ***** ***** *   * *****    ***** *   * ***** *****      | " << std::endl;
     std::cout << "|   *     *   * ** ** *        *   * *   * *     *   *      | " << std::endl;
     std::cout << "|   * *** ***** * * * *****    *   * *   * ***** *****      | " << std::endl;
     std::cout << "|   *   * *   * *   * *        *   *  * *  *     * *        | " << std::endl;
     std::cout << "|   ***** *   * *   * *****    *****   *   ***** *   *      | " << std::endl;
-    std::cout << "|                                                      v1.0 | " << std::endl;
-    std::cout << "-------------------------------------------------------------" << std::endl;
+    std::cout << "|                                                      v1.1 | " << std::endl;
+    std::cout << " -----------------------------------------------------------  " << std::endl;
     std::cout << std::endl;
     
     std::cout << "Final score:" << std::endl;
